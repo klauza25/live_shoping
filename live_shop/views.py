@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from .forms import SignUpForm, ProductForm
 from .models import Product
 from django.contrib import messages
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
 # Create your views here
 
 
@@ -84,3 +86,44 @@ def become_seller(request):
         messages.success(request, "Félicitations ! Vous êtes maintenant vendeur 🎉")
         return redirect('seller_dashboard')
     return render(request, 'become_seller.html')
+
+
+@login_required
+def edit_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id, seller=request.user)
+
+    if not request.user.profile.is_seller:
+        messages.error(request, "Accès refusé.")
+        return redirect('home')
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Produit modifié avec succès !")
+            return redirect('seller_dashboard')
+    else:
+        form = ProductForm(instance=product)
+
+    return render(request, 'edit_product.html', {'form': form, 'product': product})
+
+@login_required
+def delete_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id, seller=request.user)
+
+    if not request.user.profile.is_seller:
+        messages.error(request, "Accès refusé.")
+        return redirect('home')
+
+    if request.method == 'POST':
+        product_name = product.name
+        product.delete()
+        messages.success(request, f"Produit '{product_name}' supprimé.")
+        return redirect('seller_dashboard')
+
+    return render(request, 'confirm_delete.html', {'product': product})
+
+
+def product_catalog(request):
+    products = Product.objects.filter(stock__gt=0).select_related('seller')
+    return render(request, 'product_catalog.html', {'products': products})
