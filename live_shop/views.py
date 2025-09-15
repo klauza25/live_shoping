@@ -54,9 +54,10 @@ def seller_dashboard(request):
     if not request.user.profile.is_seller:
         messages.error(request, "Accès refusé. Vous devez être vendeur.")
         return redirect('home')
-
-    products = Product.objects.filter(seller=request.user)
+    products = Product.objects.filter(seller=request.user).exclude(id__isnull=True)
     return render(request, 'seller_dashboard.html', {'products': products})
+
+   
 
 @login_required
 def add_product(request):
