@@ -1,14 +1,50 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Accueil - Live Shopping{% endblock %}
+{% block title %}Accueil - Live_Shopping{% endblock %}
 
 {% block content %}
 <div class="text-center py-12">
+    {% if user.is_authenticated and not user.profile.is_seller %}
+    <div class="mt-4">
+        <a href="#" class="text-green-600 hover:underline">Devenir vendeur</a>
+    </div>
+{% elif user.is_authenticated and user.profile.is_seller %}
+    <div class="mt-4">
+        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">✅ Vendeur</span>
+    </div>
+{% endif %}
+
+    {% if user.is_authenticated %}
+        <div class="mb-6">
+            <p class="text-lg">👋 Bonjour, <strong>{{ user.username }}</strong> !</p>
+            <a href="{% url 'logout' %}" class="text-red-500 hover:underline">Déconnexion</a>
+        </div>
+    {% else %}
+        <div class="mb-6">
+            <a href="{% url 'login' %}" class="text-indigo-600 hover:underline mx-3">Connexion</a>
+            <span>ou</span>
+            <a href="{% url 'signup' %}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg mx-3">
+                Créer un compte
+            </a>
+        </div>
+    {% endif %}
+
     <h2 class="text-3xl font-bold mb-6">Bienvenue sur Live_Shopping !</h2>
     <p class="text-lg mb-8">Découvrez des produits en direct avec nos vendeurs.</p>
     <a href="#" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium">
         Voir les lives en cours
     </a>
+    {% if user.is_authenticated and user.profile.is_seller %}
+    <div class="mt-4">
+        <a href="{% url 'seller_dashboard' %}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+            🛒 Accéder à mon dashboard vendeur
+        </a>
+    </div>
+{% elif user.is_authenticated and not user.profile.is_seller %}
+    <div class="mt-4">
+      <a href="{% url 'become_seller' %}" class="text-green-600 hover:underline">Devenir vendeur</a>
+    </div>
+{% endif %}
 </div>
-
 {% endblock %}

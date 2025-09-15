@@ -22,6 +22,7 @@ from django.conf.urls.static import static  # ← Et ceci
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('live_shop.urls')),
+    path('accounts/', include('live_shop.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

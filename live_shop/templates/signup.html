@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Inscription - Live_Shopping{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow">
+    <h2 class="text-2xl font-bold mb-6 text-center">Créer un compte</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label class="block text-gray-700">Nom d'utilisateur</label>
+            {{ form.username }}
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700">Email</label>
+            {{ form.email }}
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700">Mot de passe</label>
+            {{ form.password1 }}
+        </div>
+        <div class="mb-6">
+            <label class="block text-gray-700">Confirmer le mot de passe</label>
+            {{ form.password2 }}
+        </div>
+        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded">
+            S'inscrire
+        </button>
+    </form>
+    <p class="mt-4 text-center">
+        Déjà un compte ? <a href="{% url 'login' %}" class="text-indigo-600">Connectez-vous</a>
+    </p>
+</div>
+{% endblock %}

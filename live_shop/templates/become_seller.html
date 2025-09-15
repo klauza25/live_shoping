@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Devenir Vendeur - Live_Shopping{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow text-center">
+
+    <h2 class="text-2xl font-bold mb-4">🚀 Devenir Vendeur</h2>
+    <p class="mb-6">Vous êtes sur le point de devenir vendeur sur Live_Shopping !</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-bold">
+            ✅ Oui, je veux devenir vendeur !
+        </button>
+    </form>
+
+    <div class="mt-4">
+        <a href="{% url 'home' %}" class="text-gray-600 hover:underline">← Retour à l'accueil</a>
+    </div>
+
+</div>
+{% endblock %}
